@@ -117,9 +117,20 @@ app.use(
     target: MCP_TARGET,
     changeOrigin: true,
     ws: true,
+    proxyTimeout: 10000,
+    timeout: 10000,
     on: {
       proxyReq: (proxyReq, req) => {
         log("proxying ->", MCP_TARGET, req.method, req.url);
+      },
+      error: (err, req, res) => {
+        log("PROXY ERROR:", err.message);
+        if (res.writeHead) {
+          res.writeHead(502, { "Content-Type": "application/json" });
+          res.end(
+            JSON.stringify({ error: "Upstream MCP server unreachable", detail: err.message }),
+          );
+        }
       },
     },
   }),
