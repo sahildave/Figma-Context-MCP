@@ -19,7 +19,7 @@
     "start": "node dist/bin.js",
     "start:cli": "cross-env NODE_ENV=cli node dist/bin.js",
     "start:http": "node dist/bin.js",
-    "start:deploy": "sh start.sh",
+    "start:deploy": "bash start.sh",
     "dev": "cross-env NODE_ENV=development tsup --watch",
     "dev:cli": "cross-env NODE_ENV=development tsup --watch -- --stdio",
     "lint": "eslint .",
