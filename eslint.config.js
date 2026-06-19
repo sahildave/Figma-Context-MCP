@@ -16,6 +16,10 @@ export default [
       },
       globals: {
         ...globals.node,
+        process: "readonly",
+        console: "readonly",
+        URL: "readonly",
+        Buffer: "readonly",
       },
     },
     plugins: {
