@@ -41,6 +41,10 @@ const STATIC_TOKEN = process.env.STATIC_TOKEN || "local-dev-static-token";
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log(req.method, req.url);
+  next();
+});
 
 // In-memory map of issued auth codes -> just need to exist briefly
 const issuedCodes = new Set();
@@ -54,12 +58,17 @@ function baseUrl(req) {
   return `${proto}://${host}`;
 }
 
+app.get("/ping", (_, res) => {
+  res.json({ ok: true });
+});
+
 // RFC 9728: Protected Resource Metadata.
 // Tells clients which authorization server protects this resource (/mcp).
 // Hyperagent (and other spec-compliant clients) fetch this BEFORE trying
 // any manually-configured endpoints, so without this, discovery fails
 // and the manual fields you typed in may never get used.
 app.get("/.well-known/oauth-protected-resource", (req, res) => {
+  console.log("protected resource route");
   const base = baseUrl(req);
   res.json({
     resource: `${base}/mcp`,
