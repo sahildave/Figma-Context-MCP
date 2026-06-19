@@ -59,6 +59,7 @@ function baseUrl(req) {
 }
 
 app.get("/ping", (_, res) => {
+  console.log("PING");
   res.json({ ok: true });
 });
 
@@ -150,6 +151,15 @@ app.use(
     ws: true,
   }),
 );
+
+console.log("=== SHIM STARTING ===");
+console.log(process.version);
+console.log(process.env.PORT);
+console.log(process.cwd());
+
+app.listen(SHIM_PORT, "0.0.0.0", () => {
+  console.log(`OAuth shim listening on 0.0.0.0:${SHIM_PORT}`);
+});
 
 app.listen(SHIM_PORT, () => {
   console.log(`OAuth shim listening on http://localhost:${SHIM_PORT}`);
