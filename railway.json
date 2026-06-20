@@ -6,6 +6,8 @@
   },
   "deploy": {
     "startCommand": "pnpm start:deploy",
+    "healthcheckPath": "/ping",
+    "healthcheckTimeout": 30,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }

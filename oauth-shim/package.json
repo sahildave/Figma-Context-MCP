@@ -1,13 +1,14 @@
 {
   "name": "mcp-oauth-shim",
   "version": "1.0.0",
-  "description": "Minimal auto-approving OAuth2 shim to front a local MCP server",
+  "description": "Minimal auto-approving OAuth2 shim to front a self-hosted MCP server",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.21.0",
+    "express": "^5.2.1",
     "http-proxy-middleware": "^3.0.0"
   }
 }
