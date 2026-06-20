@@ -135,7 +135,18 @@ app.use(
     changeOrigin: true,
     ws: true,
     on: {
-      proxyReq: (_proxyReq, req) => {
+      proxyReq: (proxyReq, req) => {
+        // CRITICAL: the framelink MCP server treats an incoming
+        // "Authorization: Bearer ..." (or "X-Figma-Token") as a PER-REQUEST
+        // Figma credential and uses it INSTEAD OF the server's configured
+        // FIGMA_API_KEY. Hyperagent sends the shim's static OAuth bearer on
+        // every /mcp call; that token is meaningless to Figma, so the server
+        // forwards it and Figma replies 403 "Invalid token". The bearer exists
+        // only to satisfy Hyperagent's OAuth handshake at the shim — the
+        // upstream MCP server must never see it. Strip both auth headers so the
+        // server always falls back to its configured PAT.
+        proxyReq.removeHeader("authorization");
+        proxyReq.removeHeader("x-figma-token");
         log("proxying ->", MCP_TARGET, req.method, req.url);
       },
       error: (err, _req, res) => {
